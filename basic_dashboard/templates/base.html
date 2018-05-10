@@ -54,15 +54,20 @@
           <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
             <form class="form-inline" action="{% url 'basic_dashboard:get_movie' 'search' %}" method="POST">
               {% csrf_token %}
-              <input name="searched" class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
+              <input name="searched" class="form-control mr-sm-2" type="search" placeholder="Movie" aria-label="Search">
             </form>
             <div class="dropdown-divider"></div>
             <a class="dropdown-item" href="{% url 'basic_dashboard:latest_movie' %}">Latest</a>
             <a class="dropdown-item" href="{% url 'basic_dashboard:popular_movies' %}">Popular</a>
             <a class="dropdown-item" href="{% url 'basic_dashboard:top_rated_movies' %}">Top Rated</a>
-            <a class="dropdown-item" href="#">Now Playing</a>
-            <a class="dropdown-item" href="#">Upcoming</a>
-            <a class="dropdown-item" href="#">Reviews</a>
+            <a class="dropdown-item" href="{% url 'basic_dashboard:now_playing_movies' %}">Now Playing</a>
+            <a class="dropdown-item" href="{% url 'basic_dashboard:upcoming_movies' %}">Upcoming</a>
+            <a class="dropdown-item" href="#">Reviews
+                <form class="form-inline" action="{% url 'basic_dashboard:get_movie_reviews' '0' %}" method="POST">
+                  {% csrf_token %}
+                  <input name="searched" class="form-control mr-sm-2" type="int" placeholder="Movie id..." aria-label="Search">
+                </form>
+            </a>
           </div>
         </li>
         <li class="nav-item dropdown">
@@ -89,6 +94,13 @@
   </nav>
   {% endblock %}
   <hr />
+  {% if messages.count != 0 %}
+    <div class="container">
+        {% for message in messages %}
+            {{ message }}
+        {% endfor %}
+    </div>
+  {% endif %}
   {% block content %}
   {% endblock %}
 </body>

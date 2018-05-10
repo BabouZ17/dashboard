@@ -1,0 +1,24 @@
+{% extends 'base.html' %}
+{% load extras %}
+{% block title %}{{ title }}{% endblock %}
+{% block content %}
+<div class="container-fluid">
+    {% for result in data.results %}
+    {% empty %}
+        Oups, il n'y pas de commentaires concernant ce film.
+    {% endfor %}
+    {% for review in data.results %}
+    <div class="row">
+        <div class="col-sm mx-auto">
+            <div class="card text-center text-black bg-light">
+                <div class="card-body">
+                    <h5 class="card-title">{{ review.author }}</h5>
+                    <p class="card-text">{{ review.content }}</p>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="dropdown-divider"></div>
+    {% endfor %}
+</div>
+{% endblock %}

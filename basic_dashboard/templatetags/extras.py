@@ -61,7 +61,7 @@ def to_human_value(value):
             transit[len(transit)-12:len(transit)-11] + ' Trillions'
         else:
             new_value = transit
-    except TypeError:
+    except (TypeError, ValueError):
         new_value = value
     return new_value
 

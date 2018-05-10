@@ -85,47 +85,81 @@ def get_latest_movie(request):
 	}
 	return render(request, 'movie.html', context)
 
-def get_top_rated_movies(request):
-    """
-    Get the top rated movies from moviedb
-    """
-    response = requests.get(url=settings.THE_MOVIE_DB_API_URL + \
-	'/movie/top_rated?api_key=' + settings.THE_MOVIE_DB_API_KEY + '&page=1')
-    return render(request, 'movies.html', {'data': response.json(), 'title'
-	: 'Top Rated Movies'})
-
 def get_popular_movies(request):
-    """
-    Get the popular movies from moviedb
-    """
-    response = requests.get(url=settings.THE_MOVIE_DB_API_URL +
-	'/movie/popular?api_key=' + settings.THE_MOVIE_DB_API_KEY + '&page=1')
-    return render(request, 'movies.html', {'data': response.json(), 'title':
-	'Popular Movies'})
+	"""
+	Get popular movies from moviedb
+	"""
+	response = requests.get(url=settings.THE_MOVIE_DB_API_URL +
+	'/movie/popular?api_key=' + settings.THE_MOVIE_DB_API_KEY)
+	context = {
+		'data': response.json(),
+		'title': 'Popular Movies'
+	}
+	return render(request, 'movies.html', context)
+
+def get_top_rated_movies(request):
+	"""
+	Get top rated movies from moviedb
+	"""
+	response = requests.get(url=settings.THE_MOVIE_DB_API_URL +
+	'/movie/top_rated?api_key=' + settings.THE_MOVIE_DB_API_KEY)
+	context = {
+		'data': response.json(),
+		'title': 'Top Rated Movies'
+	}
+	return render(request, 'movies.html', context)
 
 def get_now_playing_movies(request):
 	"""
-	Get the now playing movies from moviedb
+	Get now playing movies from moviedb
 	"""
-	response = ''
-	return render(request, 'movies.html', {'data': response.json(), 'title':
-	'Now Playing Movies'})
+	response = requests.get(url=settings.THE_MOVIE_DB_API_URL +
+	'/movie/now_playing?api_key=' + settings.THE_MOVIE_DB_API_KEY)
+	context = {
+		'data': response.json(),
+		'title': 'Now Playing Movies'
+	}
+	return render(request, 'movies.html', context)
 
 def get_upcoming_movies(request):
 	"""
-	Get the upcoming movies from moviedb
+	Get upcoming movies from moviedb
 	"""
-	response = ''
-	return render(request, 'movies.html', {'data': response.json(), 'title':
-	'Upcoming Movies'})
+	response = requests.get(url=settings.THE_MOVIE_DB_API_URL +
+	'/movie/upcoming?api_key=' + settings.THE_MOVIE_DB_API_KEY)
+	context = {
+		'data': response.json(),
+		'title': 'Upcoming Movies'
+	}
+	return render(request, 'movies.html', context)
 
-def get_movie_reviews(request):
+def get_movie_reviews(request, id):
 	"""
-	Get the movie's reviews from moviedb
+	Get reviews from moviedb according to the id
 	"""
-	response = ''
-	return render(request, 'movies.html', {'data': response.json(), 'title':
-	'Movie\'s reviews'})
+	if request.method == 'POST':
+		id = request.POST.get('searched', '')
+		response = requests.get(url=settings.THE_MOVIE_DB_API_URL +
+		'/movie/' + str(id) + '/reviews?api_key=' + settings.THE_MOVIE_DB_API_KEY +
+		'&page=1')
+		context = {
+			'data': response.json(),
+			'title': 'Movie {} Reviews'.format(id),
+		}
+		return redirect(reverse('basic_dashboard:get_movie_reviews', args=(id,)))
+	elif request.method == 'GET':
+		assert type(id) is int
+		response = requests.get(url=settings.THE_MOVIE_DB_API_URL +
+		'/movie/' + str(id) + '/reviews?api_key=' + settings.THE_MOVIE_DB_API_KEY +
+		'&page=1')
+		context = {
+			'data': response.json(),
+			'title': 'Movie {} Reviews'.format(id),
+		}
+		return render(request, 'reviews.html', context)
+	else:
+		messages.add_message(request, messages.INFO, 'Issue with your request')
+		return render(request, 'home.html')
 
 def get_movie(request, movie):
 	"""
