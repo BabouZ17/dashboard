@@ -1,0 +1,25 @@
+{% extends 'base.html' %}
+{% load extras %}
+{% block title %}{{ title }}{% endblock %}
+{% block content %}
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-bg mx-auto">
+            <div class="card text-center text-white bg-dark">
+                <img class="card-img-top" src="http://images.all-free-download.com/images/graphicthumb/imax_1_81044.jpg" alt="Card image cap">
+                <div class="card-body">
+                    <h5 class="card-title">{{ data.original_title }}</h5>
+                    <p class="card-text">Id: {{ data.id }}</p>
+                    <p class="card-text">Release Date: {{ data.release_date }}</p>
+                    <p class="card-text">Budget: {{ data.budget|to_human_value}}$</p>
+                    <p class="card-text">Revenue: {{ data.revenue|to_human_value }}$</p>
+                    <p class="card-text">Genre: {{ data.genre.name }}</p>
+                    <p class="card-text">Vote average: {{ data.vote_average }}</p>
+                    <p class="card-text">Vote count: {{ data.vote_count }}</p>
+                    <p class="card-text">Overview: {{ data.overview }}</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

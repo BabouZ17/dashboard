@@ -1,0 +1,5 @@
+# Python
+pyvenv.cfg
+dashboard_app/settings.py
+
+Procfile

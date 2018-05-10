@@ -1,0 +1,33 @@
+{% extends 'base.html' %}
+{% block title %}{{ title }}{% endblock %}
+
+{% block content %}
+<div class="container-fluid">
+  <table class="table table-bordered table-striped table-hover">
+    <thead class="thead-dark">
+      <tr class="table-secondary">
+        {% for element in data.results %}
+          {% if forloop.counter == 1 %}
+            {% for header in element.keys %}
+              {% if 'path' not in header %}
+                <th>{{ header }}</th>
+              {% endif %}
+            {% endfor %}
+          {% endif %}
+        {% endfor %}
+      </tr>
+    </thead>
+    <tbody>
+      {% for element in data.results %}
+        <tr>
+          {% for key,value in element.items %}
+            {% if 'path' not in key %}
+              <td>{{ value }}</td>
+            {% endif %}
+          {% endfor %}
+        </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+{% endblock %}

@@ -1,0 +1,54 @@
+{% extends 'base.html' %}
+{% block title %}{{ crypto_data.data.name }}{% endblock %}
+{% load extras %}
+{% block content %}
+  {% if messages.count != 0 %}
+    <div class="container">
+      {% for message in messages %}
+        {{ message }}
+      {% endfor %}
+    </div>
+  {% endif %}
+  <div class="container-fluid">
+    <div class="row">
+      <div class="col-lg">
+        <div class="card">
+          <div class="card-body">
+            <h5 class="card-title">{{ crypto_data.data.name }}</h5>
+            <h6 class="card-subtitle mb-2 text-muted">{{ crypto_data.data.quotes.USD.price }}$</h6>
+            <p class="card-text">Rank: {{ crypto_data.data.rank }}</p>
+            <p class="card-text">24h Volume USD: {{ crypto_data.data.quotes.USD.volume_24h|to_human_value }}</p>
+            <p class="card-text">Market Cap USD: {{ crypto_data.data.quotes.USD.market_cap|to_human_value }}</p>
+            <p class="card-text">Circulating Supply: {{ crypto_data.data.circulating_supply|to_human_value }}</p>
+            <p class="card-text">Total Supply: {{ crypto_data.data.total_supply|to_human_value }}</p>
+            <p class="card-text">Max Supply: {{ crypto_data.data.max_supply|to_human_value }}</p>
+            <p class="card-text">Last Hour %: {{ crypto_data.data.quotes.USD.percent_change_1h }}</p>
+            <p class="card-text">Last Day %: {{ crypto_data.data.quotes.USD.percent_change_24h }}</p>
+            <p class="card-text">Last Week %: {{ crypto_data.data.quotes.USD.percent_change_7d }}</p>
+            <p class="card-text">Last Update At: {{ crypto_data.data.last_updated|to_human_date }}</p>
+          </div>
+        </div>
+      </div>
+      <div class="col-sm">
+        <script type="text/javascript" src="https://files.coinmarketcap.com/static/widget/currency.js"></script>
+        <div class="coinmarketcap-currency-widget" data-currencyid={{ crypto_data.data.id }} data-base="USD"  data-secondary="BTC" statsticker="true"></div>
+      </div>
+      <div class="col-sm">
+        <div class="card">
+          <div class="card-body">
+            <h5 class="card-title">Global</h5>
+            <p class="card-text">Total Market CAP USD: {{ global_data.data.quotes.USD.total_market_cap|to_human_value }}$</p>
+            <p class="card-text">Total 24h Volume USD: {{ global_data.data.quotes.USD.total_volume_24h|to_human_value }}$</p>
+            <p class="card-text">Bitcoin % Of Market: {{ global_data.data.bitcoin_percentage_of_market_cap }}</p>
+            <p class="card-text">Active Currencies: {{ global_data.data.active_cryptocurrencies }}</p>
+            <p class="card-text">Active Markets: {{ global_data.data.active_markets }}</p>
+            <p class="card-text">Last Update At: {{ global_data.data.last_updated|to_human_date }}</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+{% endblock %}
+
+{% block footer %}
+{% endblock %}
