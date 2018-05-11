@@ -7,6 +7,7 @@ urlpatterns = [
 	path('', views.index),
 	path('home', views.index, name='home'),
 	path('weather', views.get_weather, name='get_weather'),
+	path('crypto/news', views.get_crypto_news, name='get_crypto_news'),
 	path('crypto/<str:crypto>', views.get_crypto, name='get_crypto'),
 	path('movie/search', views.get_movie, name='get_movie'),
 	path('movies/latest_movie', views.get_latest_movie, name='latest_movie'),

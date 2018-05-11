@@ -46,6 +46,8 @@
               </a>
             </form>
             <div class="dropdown-divider"></div>
+            <a class="dropdown-item" href="{% url 'basic_dashboard:get_crypto_news' %}">News</a>
+            <div class="dropdown-divider"></div>
             <a class="dropdown-item" href="{% url 'basic_dashboard:get_crypto' 'BTC' %}">BTC</a>
             <a class="dropdown-item" href="{% url 'basic_dashboard:get_crypto' 'ETH' %}">ETH</a>
           </div>

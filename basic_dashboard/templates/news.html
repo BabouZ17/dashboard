@@ -1,0 +1,21 @@
+{% extends 'base.html' %}
+{% block title %}{{ title }}{% endblock %}
+{% load extras %}
+{% block content %}
+<div class="container">
+    {% for article in data.articles %}
+    <div class="card">
+        <div class="card-body text-center">
+            <h5 class="card-title">{{ article.title }}</h5>
+            <h6 class="card-subtitle mb-2 text-muted">{{ article.source.name }}</h6>
+            <p class="card-text">{{ article.description }}</p>
+            <a href={{ article.url }}>{{ article.url }}</a>
+            <p class="card-text">{{ article.publishedAt }}</p>
+        </div>
+    </div>
+    <div class="dropdown-divider"></div>
+    {% endfor %}
+</div>
+{% endblock %}
+{% block footer %}
+{% endblock %}

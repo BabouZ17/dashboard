@@ -34,12 +34,26 @@ def get_weather(request):
 
 # Cryptos
 
+def get_crypto_news(request):
+	"""
+	Get general crypto news
+	"""
+	news = requests.get(url=settings.COIN_NEWS_API_URL +
+		'q=' + 'crypto+market' +
+		'&language=en' + '&sortBy=publishedAt&pageSize=5&apiKey=' +
+		settings.COIN_NEWS_API_KEY).json()
+	context = {
+		'data': news,
+		'title': 'Crypto News'
+	}
+	return render(request, 'news.html', context)
+
 def get_crypto(request, crypto):
 	"""
 	Get the crypto intel and global intel
 	"""
 	result = ''
-	global_response = requests.get(url=settings.COIN_MARKET_API_URL +
+	global_crypto_data = requests.get(url=settings.COIN_MARKET_API_URL +
 		'global/').json()
 
 	if request.method == 'GET':
@@ -50,15 +64,21 @@ def get_crypto(request, crypto):
 			messages.add_message(request, messages.INFO, 'Unknown Crypto ...')
 			context = {
 				'crypto_data': '',
-				'global_data': global_response
+				'crypto_news': '',
+				'global_data': global_crypto_data
 			}
 			return render(request, 'crypto.html', context)
 
-		response = requests.get(url=settings.COIN_MARKET_API_URL + 'ticker/'
+		crypto_data = requests.get(url=settings.COIN_MARKET_API_URL + 'ticker/'
 			+ result + '/').json()
+		crypto_news = requests.get(url=settings.COIN_NEWS_API_URL +
+			'q=' + crypto_data['data']['name'] +
+			'&language=en' + '&sortBy=publishedAt&pageSize=2&apiKey=' +
+			settings.COIN_NEWS_API_KEY).json()
 		context = {
-			'crypto_data': response,
-			'global_data': global_response,
+			'crypto_data': crypto_data,
+			'crypto_news': crypto_news,
+			'global_data': global_crypto_data,
 		}
 		return render(request, 'crypto.html', context)
 	elif request.method == 'POST':
@@ -70,15 +90,21 @@ def get_crypto(request, crypto):
 			messages.add_message(request, messages.INFO, 'Unknown Crypto ...')
 			context = {
 				'crypto_data': '',
-				'global_data': global_response
+				'crypto_news': '',
+				'global_data': global_crypto_data
 			}
 			return render(request, 'crypto.html', context)
 
-		response = requests.get(url=settings.COIN_MARKET_API_URL + 'ticker/'
+		crypto_data = requests.get(url=settings.COIN_MARKET_API_URL + 'ticker/'
 			+ result + '/').json()
+		crypto_news = requests.get(url=settings.COIN_NEWS_API_URL +
+			'everything?q=' + crypto_data['data']['name'] +
+			'&language=en' + '&sortBy=publishedAt&pageSize=2&apiKey=' +
+			settings.COIN_NEWS_API_KEY).json()
 		context = {
-			'crypto_data': response,
-			'global_data': global_response,
+			'crypto_data': crypto_data,
+			'crypto_news': crypto_news,
+			'global_data': global_crypto_data,
 		}
 		return redirect(reverse('basic_dashboard:get_crypto', args=(searched,)))
 
@@ -89,7 +115,7 @@ def get_latest_movie(request):
 	Get latest movie from moviedb
 	"""
 	response = requests.get(url=settings.THE_MOVIE_DB_API_URL +
-	'/movie/latest?api_key=' + settings.THE_MOVIE_DB_API_KEY)
+		'/movie/latest?api_key=' + settings.THE_MOVIE_DB_API_KEY)
 	context = {
 		'data': response.json(),
 		'title': 'Latest Movie'
@@ -101,7 +127,7 @@ def get_popular_movies(request):
 	Get popular movies from moviedb
 	"""
 	response = requests.get(url=settings.THE_MOVIE_DB_API_URL +
-	'/movie/popular?api_key=' + settings.THE_MOVIE_DB_API_KEY)
+		'/movie/popular?api_key=' + settings.THE_MOVIE_DB_API_KEY)
 	context = {
 		'data': response.json(),
 		'title': 'Popular Movies'
@@ -113,7 +139,7 @@ def get_top_rated_movies(request):
 	Get top rated movies from moviedb
 	"""
 	response = requests.get(url=settings.THE_MOVIE_DB_API_URL +
-	'/movie/top_rated?api_key=' + settings.THE_MOVIE_DB_API_KEY)
+		'/movie/top_rated?api_key=' + settings.THE_MOVIE_DB_API_KEY)
 	context = {
 		'data': response.json(),
 		'title': 'Top Rated Movies'
@@ -125,7 +151,7 @@ def get_now_playing_movies(request):
 	Get now playing movies from moviedb
 	"""
 	response = requests.get(url=settings.THE_MOVIE_DB_API_URL +
-	'/movie/now_playing?api_key=' + settings.THE_MOVIE_DB_API_KEY)
+		'/movie/now_playing?api_key=' + settings.THE_MOVIE_DB_API_KEY)
 	context = {
 		'data': response.json(),
 		'title': 'Now Playing Movies'
@@ -137,7 +163,7 @@ def get_upcoming_movies(request):
 	Get upcoming movies from moviedb
 	"""
 	response = requests.get(url=settings.THE_MOVIE_DB_API_URL +
-	'/movie/upcoming?api_key=' + settings.THE_MOVIE_DB_API_KEY)
+		'/movie/upcoming?api_key=' + settings.THE_MOVIE_DB_API_KEY)
 	context = {
 		'data': response.json(),
 		'title': 'Upcoming Movies'
@@ -151,8 +177,8 @@ def get_movie_reviews(request, searched):
 	if request.method == 'POST':
 		searched = request.POST.get('searched', '')
 		response = requests.get(url=settings.THE_MOVIE_DB_API_URL +
-		'/movie/' + str(searched) + '/reviews?api_key=' + settings.THE_MOVIE_DB_API_KEY +
-		'&page=1')
+			'/movie/' + str(searched) + '/reviews?api_key=' + settings.THE_MOVIE_DB_API_KEY +
+			'&page=1')
 		context = {
 			'data': response.json(),
 			'title': 'Movie {} Reviews'.format(searched),
@@ -164,8 +190,8 @@ def get_movie_reviews(request, searched):
 		except AssertionError:
 			searched = 0
 		response = requests.get(url=settings.THE_MOVIE_DB_API_URL +
-		'/movie/' + str(searched) + '/reviews?api_key=' + settings.THE_MOVIE_DB_API_KEY +
-		'&page=1')
+			'/movie/' + str(searched) + '/reviews?api_key=' + settings.THE_MOVIE_DB_API_KEY +
+			'&page=1')
 		context = {
 			'data': response.json(),
 			'title': 'Movie {} Reviews'.format(searched),
@@ -182,8 +208,8 @@ def get_movie(request):
 	if request.method == 'POST':
 		searched = request.POST.get('searched', '')
 		response = requests.get(url=settings.THE_MOVIE_DB_API_URL +
-		'/search/movie?api_key=' + settings.THE_MOVIE_DB_API_KEY +
-		'&language=en-US' + '&query=' + searched + '&page=1')
+			'/search/movie?api_key=' + settings.THE_MOVIE_DB_API_KEY +
+			'&language=en-US' + '&query=' + searched + '&page=1')
 		context = {
 			'data': response.json(),
 			'title': 'Movie Search'
@@ -202,8 +228,8 @@ def get_tvshow(request):
 	if request.method == 'POST':
 		searched = request.POST.get('searched', '')
 		response = requests.get(url=settings.THE_MOVIE_DB_API_URL +
-		'/search/tv?api_key=' + settings.THE_MOVIE_DB_API_KEY +
-		'&language=en-US' + '&query=' + searched + '&page=1')
+			'/search/tv?api_key=' + settings.THE_MOVIE_DB_API_KEY +
+			'&language=en-US' + '&query=' + searched + '&page=1')
 		context = {
 			'data': response.json(),
 			'title': 'TVShow Search'
@@ -218,7 +244,7 @@ def get_latest_tvshow(request):
 	Get latest tvshow from moviedb
 	"""
 	response = requests.get(url=settings.THE_MOVIE_DB_API_URL +
-	'/tv/latest?api_key=' + settings.THE_MOVIE_DB_API_KEY)
+		'/tv/latest?api_key=' + settings.THE_MOVIE_DB_API_KEY)
 	context = {
 		'data': response.json(),
 		'title': 'Latest TV Show'
@@ -230,7 +256,7 @@ def get_popular_tvshows(request):
 	Get popular tvshows from moviedb
 	"""
 	response = requests.get(url=settings.THE_MOVIE_DB_API_URL +
-	'/tv/popular?api_key=' + settings.THE_MOVIE_DB_API_KEY)
+		'/tv/popular?api_key=' + settings.THE_MOVIE_DB_API_KEY)
 	context = {
 		'data': response.json(),
 		'title': 'Popular TVshows'
@@ -242,7 +268,7 @@ def get_top_rated_tvshow(request):
 	Get top rated tvshow from moviedb
 	"""
 	response = requests.get(url=settings.THE_MOVIE_DB_API_URL +
-	'/tv/top_rated?api_key=' + settings.THE_MOVIE_DB_API_KEY)
+		'/tv/top_rated?api_key=' + settings.THE_MOVIE_DB_API_KEY)
 	context = {
 		'data': response.json(),
 		'title': 'Top Rated TV Shows'
@@ -254,7 +280,7 @@ def get_upcoming_tvshows(request):
 	Get upcoming tvshows from moviedb (following week)
 	"""
 	response = requests.get(url=settings.THE_MOVIE_DB_API_URL +
-	'/tv/on_the_air?api_key=' + settings.THE_MOVIE_DB_API_KEY)
+		'/tv/on_the_air?api_key=' + settings.THE_MOVIE_DB_API_KEY)
 	context = {
 		'data': response.json(),
 		'title': 'Upcoming TV Shows'
@@ -266,7 +292,7 @@ def get_playing_today_tvshows(request):
 	Get playing today tvshows from moviedb
 	"""
 	response = requests.get(url=settings.THE_MOVIE_DB_API_URL +
-	'/tv/airing_today?api_key=' + settings.THE_MOVIE_DB_API_KEY)
+		'/tv/airing_today?api_key=' + settings.THE_MOVIE_DB_API_KEY)
 	context = {
 		'data': response.json(),
 		'title': 'Airing Today Shows'
@@ -280,8 +306,8 @@ def get_tvshow_reviews(request, searched):
 	if request.method == 'POST':
 		id = request.POST.get('searched', '')
 		response = requests.get(url=settings.THE_MOVIE_DB_API_URL +
-		'/tv/' + str(id) + '/reviews?api_key=' + settings.THE_MOVIE_DB_API_KEY +
-		'&page=1')
+			'/tv/' + str(id) + '/reviews?api_key=' + settings.THE_MOVIE_DB_API_KEY +
+			'&page=1')
 		context = {
 			'data': response.json(),
 			'title': 'TV Show {} Reviews'.format(id),
@@ -294,8 +320,8 @@ def get_tvshow_reviews(request, searched):
 		except AssertionError:
 			searched = 0
 		response = requests.get(url=settings.THE_MOVIE_DB_API_URL +
-		'/tv/' + str(searched) + '/reviews?api_key=' + settings.THE_MOVIE_DB_API_KEY +
-		'&page=1')
+			'/tv/' + str(searched) + '/reviews?api_key=' + settings.THE_MOVIE_DB_API_KEY +
+			'&page=1')
 		context = {
 			'data': response.json(),
 			'title': 'TV Show {} Reviews'.format(searched),
