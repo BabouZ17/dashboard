@@ -2,6 +2,9 @@
 {% load extras %}
 {% block title %}{{ title }}{% endblock %}
 {% block content %}
+<div class="mx-auto" style="width:300px">
+    <h1><span class="badge badge-secondary">{{ title }}</span></h1>
+</div>
 <div class="container-fluid">
     {% for result in data.results %}
     {% empty %}

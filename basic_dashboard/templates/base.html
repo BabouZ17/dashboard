@@ -52,7 +52,7 @@
           aria-haspopup="true" aria-expanded="false">
           Movies</a>
           <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
-            <form class="form-inline" action="{% url 'basic_dashboard:get_movie' 'search' %}" method="POST">
+            <form class="form-inline" action="{% url 'basic_dashboard:get_movie' %}" method="POST">
               {% csrf_token %}
               <input name="searched" class="form-control mr-sm-2" type="search" placeholder="Movie" aria-label="Search">
             </form>
@@ -75,19 +75,24 @@
           aria-haspopup="true" aria-expanded="false">
           TV Shows</a>
           <div class="dropdown-menu" aria-describedby="navbarDropdownMenuLink">
-            <form class="form-inline" action="{% url 'basic_dashboard:get_tv_show' 'search' %}" method="POST">
+            <form class="form-inline" action="{% url 'basic_dashboard:get_tvshow' %}" method="POST">
               {% csrf_token %}
               <input name="searched" class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
             </form>
             <div class="dropdown-divider"></div>
-            <a class="dropdown-item" href="#">Latest</a>
-            <a class="dropdown-item" href="#">Popular</a>
-            <a class="dropdown-item" href="#">Top Rated</a>
-            <a class="dropdown-item" href="#">Now Playing</a>
-            <a class="dropdown-item" href="#">Reviews</a>
+            <a class="dropdown-item" href="{% url 'basic_dashboard:latest_tvshow' %}">Latest</a>
+            <a class="dropdown-item" href="{% url 'basic_dashboard:popular_tvshows' %}">Popular</a>
+            <a class="dropdown-item" href="{% url 'basic_dashboard:top_rated_tvshows' %}">Top Rated</a>
+            <a class="dropdown-item" href="{% url 'basic_dashboard:upcoming_tvshows' %}">Coming</a>
+            <a class="dropdown-item" href="{% url 'basic_dashboard:playing_today_tvshows' %}">On Air Today</a>
+            <a class="dropdown-item" href="#">Reviews
+                <form class="form-inline" action="{% url 'basic_dashboard:get_tvshow_reviews' '0' %}" method="POST">
+                  {% csrf_token %}
+                  <input name="searched" class="form-control mr-sm-2" type="int" placeholder="TV Show id..." aria-label="Search">
+                </form>
+            </a>
           </div>
         </li>
-        <a class="nav-item nav-link" href="#">Agenda</a>
         <a class="nav-item nav-link" href="#">Domotic</a>
       </div>
     </div>

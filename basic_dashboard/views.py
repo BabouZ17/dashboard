@@ -135,7 +135,7 @@ def get_upcoming_movies(request):
 
 def get_movie_reviews(request, id):
 	"""
-	Get reviews from moviedb according to the id
+	Get reviews from moviedb according to the id of the movie
 	"""
 	if request.method == 'POST':
 		id = request.POST.get('searched', '')
@@ -161,18 +161,131 @@ def get_movie_reviews(request, id):
 		messages.add_message(request, messages.INFO, 'Issue with your request')
 		return render(request, 'home.html')
 
-def get_movie(request, movie):
+def get_movie(request):
 	"""
 	Get a searched movie
 	"""
-	return render(request, 'home.html')
+	if request.method == 'POST':
+		searched = request.POST.get('searched', '')
+		response = requests.get(url=settings.THE_MOVIE_DB_API_URL +
+		'/search/movie?api_key=' + settings.THE_MOVIE_DB_API_KEY +
+		'&language=en-US' + '&query=' + searched + '&page=1')
+		context = {
+			'data': response.json(),
+			'title': 'Movie Search'
+		}
+		return render(request, 'movies_result.html', context)
+	else:
+		messages.add_message(request, messages.INFO, 'Issue with your request')
+		return render(request, 'home.html')
+
 # TV Shows
 
-def get_tv_show(request, tvshow):
+def get_tvshow(request):
 	"""
 	Get a searched tv show
 	"""
-	return render(request, 'home.html')
-# Agenda
+	if request.method == 'POST':
+		searched = request.POST.get('searched', '')
+		response = requests.get(url=settings.THE_MOVIE_DB_API_URL +
+		'/search/tv?api_key=' + settings.THE_MOVIE_DB_API_KEY +
+		'&language=en-US' + '&query=' + searched + '&page=1')
+		context = {
+			'data': response.json(),
+			'title': 'TVShow Search'
+		}
+		return render(request, 'tvshows.html', context)
+	else:
+		messages.add_message(request, messages.INFO, 'Issue with your request')
+		return render(request, 'home.html')
+
+def get_latest_tvshow(request):
+	"""
+	Get latest tvshow from moviedb
+	"""
+	response = requests.get(url=settings.THE_MOVIE_DB_API_URL +
+	'/tv/latest?api_key=' + settings.THE_MOVIE_DB_API_KEY)
+	context = {
+		'data': response.json(),
+		'title': 'Latest TV Show'
+	}
+	return render(request, 'tvshow.html', context)
+
+def get_popular_tvshows(request):
+	"""
+	Get popular tvshows from moviedb
+	"""
+	response = requests.get(url=settings.THE_MOVIE_DB_API_URL +
+	'/tv/popular?api_key=' + settings.THE_MOVIE_DB_API_KEY)
+	context = {
+		'data': response.json(),
+		'title': 'Popular TVshows'
+	}
+	return render(request, 'tvshows.html', context)
+
+def get_top_rated_tvshow(request):
+	"""
+	Get top rated tvshow from moviedb
+	"""
+	response = requests.get(url=settings.THE_MOVIE_DB_API_URL +
+	'/tv/top_rated?api_key=' + settings.THE_MOVIE_DB_API_KEY)
+	context = {
+		'data': response.json(),
+		'title': 'Top Rated TV Shows'
+	}
+	return render(request, 'tvshows.html', context)
+
+def get_upcoming_tvshows(request):
+	"""
+	Get upcoming tvshows from moviedb (following week)
+	"""
+	response = requests.get(url=settings.THE_MOVIE_DB_API_URL +
+	'/tv/on_the_air?api_key=' + settings.THE_MOVIE_DB_API_KEY)
+	context = {
+		'data': response.json(),
+		'title': 'Upcoming TV Shows'
+	}
+	return render(request, 'tvshows.html', context)
+
+def get_playing_today_tvshows(request):
+	"""
+	Get playing today tvshows from moviedb
+	"""
+	response = requests.get(url=settings.THE_MOVIE_DB_API_URL +
+	'/tv/airing_today?api_key=' + settings.THE_MOVIE_DB_API_KEY)
+	context = {
+		'data': response.json(),
+		'title': 'Airing Today Shows'
+	}
+	return render(request, 'tvshows.html', context)
+
+def get_tvshow_reviews(request, id):
+	"""
+	Get reviews from moviedb according to the id of the tvshow
+	"""
+	if request.method == 'POST':
+		id = request.POST.get('searched', '')
+		response = requests.get(url=settings.THE_MOVIE_DB_API_URL +
+		'/tv/' + str(id) + '/reviews?api_key=' + settings.THE_MOVIE_DB_API_KEY +
+		'&page=1')
+		context = {
+			'data': response.json(),
+			'title': 'TV Show {} Reviews'.format(id),
+			'test': 'haha'
+		}
+		return redirect(reverse('basic_dashboard:get_tvshow_reviews', args=(id,)))
+	elif request.method == 'GET':
+		assert type(id) is int
+		response = requests.get(url=settings.THE_MOVIE_DB_API_URL +
+		'/tv/' + str(id) + '/reviews?api_key=' + settings.THE_MOVIE_DB_API_KEY +
+		'&page=1')
+		context = {
+			'data': response.json(),
+			'title': 'TV Show {} Reviews'.format(id),
+		}
+		return render(request, 'reviews.html', context)
+	else:
+		messages.add_message(request, messages.INFO, 'Issue with your request')
+		return render(request, 'home.html')
 
 # Domotic

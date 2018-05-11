@@ -1,0 +1,32 @@
+{% extends 'base.html' %}
+{% load extras %}
+{% block title %}{{ title }}{% endblock %}
+{% block content %}
+<div class="mx-auto" style="width:300px">
+    <h1><span class="badge badge-secondary">{{ title }}</span></h1>
+</div>
+{% for tvshow in data.results %}
+{% empty %}
+Oups il n'y pas de résultats pour votre recherche.
+{% endfor %}
+<div class="container">
+    {% for tvshow in data.results %}
+    <div class="row">
+        <div class="col-bg mx-auto">
+            <div class="card text-center text-white bg-secondary">
+                <div class="card-body">
+                    <h5 class="card-title">{{ tvshow.original_name }}</h5>
+                    <p class="card-text">Id: {{ tvshow.id }}</p>
+                    <p class="card-text">First Air Date: {{ tvshow.first_air_date }}</p>
+                    <p class="card-text">Origin Country: {{ tvshow.origin_country }}</p>
+                    <div class="dropdown-divider"></div>
+                    <p class="card-text">Overview: {{ tvshow.overview }}</p>
+                    <p class="card-text">Popularity: {{ tvshow.popularity }}</p>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="dropdown-divider"></div>
+    {% endfor %}
+</div>
+{% endblock %}

@@ -1,0 +1,34 @@
+{% extends 'base.html' %}
+{% load extras %}
+{% block title %}{{ title }}{% endblock %}
+{% block content %}
+<div class="mx-auto" style="width:300px">
+    <h1><span class="badge badge-secondary">{{ title }}</span></h1>
+</div>
+{% for movie in data.results %}
+{% empty %}
+Oups il n'y pas de résultats pour votre recherche.
+{% endfor %}
+<div class="container">
+    {% for result in data.results %}
+    <div class="row">
+        <div class="col-bg mx-auto">
+            <div class="card text-center text-white bg-secondary">
+                <div class="card-body">
+                    <h5 class="card-title">{{ result.title }}</h5>
+                    <p class="card-text">Id: {{ result.id }}</p>
+                    <p class="card-text">Release Date: {{ result.release_date }}</p>
+                    <p class="card-text">Genre: {{ result.genre_ids }}</p>
+                    <p class="card-text">Vote average: {{ result.vote_average }}</p>
+                    <div class="dropdown-divider"></div>
+                    <p class="card-text">Vote count: {{ result.vote_count }}</p>
+                    <p class="card-text">Overview: {{ result.overview }}</p>
+                    <p class="card-text">Popularity: {{ result.popularity }}</p>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="dropdown-divider"></div>
+    {% endfor %}
+</div>
+{% endblock %}

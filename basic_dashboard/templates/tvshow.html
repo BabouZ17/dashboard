@@ -1,0 +1,34 @@
+{% extends 'base.html' %}
+{% load extras %}
+{% block title %}{{ title }}{% endblock %}
+{% block content %}
+<div class="mx-auto" style="width:300px">
+    <h1><span class="badge badge-secondary">{{ title }}</span></h1>
+</div>
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-bg mx-auto">
+            <div class="card text-center text-white bg-secondary">
+                <div class="card-body">
+                    <h5 class="card-title">{{ data.original_name }}</h5>
+                    <p class="card-text">Id: {{ data.id }}</p>
+                    <p class="card-text">Created by: {{ data.createt_by }}</p>
+                    <p class="card-text">First Air Date: {{ data.first_air_date }}</p>
+                    <div class="dropdown-divider"></div>
+                    <p class="card-text">Networks: {{ data.networks.0.name }}</p>
+                    <p class="card-text">Number of episodes: {{ data.number_of_episodes }}</p>
+                    <p class="card-text">Number of seasons: {{ data.number_of_seasons }}</p>
+                    <p class="card-text">Origin Country: {{ data.origin_country }}</p>
+                    <div class="dropdown-divider"></div>
+                    <p class="card-text">Overview: {{ data.overview }}</p>
+                    <p class="card-text">Popularity: {{ data.popularity }}</p>
+                    <div class="dropdown-divider"></div>
+                    <p class="card-text">Air Date of New Season: {{ data.seasons.0.air_date }}</p>
+                    <p class="card-text">Episode count: {{ data.seasons.0.episode_count }}</p>
+                    <p class="card-text">Season number: {{ data.seasons.0.season_number }}</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
