@@ -12,7 +12,7 @@ def to_celsius(value):
     """
     to_celsius = ''
     try:
-        to_celsius = (int(value) - 32) * 5/9
+        to_celsius = str(value - 273.15)[:4]
     except ValueError:
         pass
     return to_celsius

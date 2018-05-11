@@ -1,57 +1,18 @@
 {% extends 'base.html' %}
-{% block title %}Home{% endblock %}
-{% load extras %}
+{% block title %}{{ title }}{% endblock %}
 {% block content %}
-<h1><span class="badge badge-secondary">Weather</span></h1>
 <div class="container">
-  <div class="row">
-    <div class="col">
-      <div class="card" style="width: 18rem;">
-        <div class="card-body">
-          <h5 class="card-title">Annemasse</h5>
-          <h6 class="card-subtitle mb-2 text-muted">{{ weather_data.annemasse.weather.0.main }}, {{ weather_data.annemasse.weather.0.description }}</h6>
-          <p class="card-text">Temp: {{ weather_data.annemasse.main.temp|to_celsius }}</p>
-          <p class="card-text">Max: {{ weather_data.annemasse.main.temp_max|to_celsius }}</p>
-          <p class="card-text">Min: {{ weather_data.annemasse.main.temp_min|to_celsius }}</p>
-          <p class="card-text">Humidity: {{ weather_data.annemasse.main.humidity }} %</p>
-          <p class="card-text">Wind: {{ weather_data.annemasse.wind.speed }} m/s</p>
-          <p class="card-text">Sunrise: {{ weather_data.annemasse.sys.sunrise|to_human_date }}</p>
-          <p class="card-text">Sunset: {{ weather_data.annemasse.sys.sunset|to_human_date }}</p>
-        </div>
-      </div>
-    </div>
-    <div class="col">
-      <div class="card" style="width: 18rem;">
-        <div class="card-body">
-          <h5 class="card-title">Rochefort</h5>
-          <h6 class="card-subtitle mb-2 text-muted">{{ weather_data.rochefort.weather.0.main }}, {{ weather_data.rochefort.weather.0.description }}</h6>
-          <p class="card-text">Temp: {{ weather_data.rochefort.main.temp|to_celsius }}</p>
-          <p class="card-text">Max: {{ weather_data.rochefort.main.temp_max|to_celsius }}</p>
-          <p class="card-text">Min: {{ weather_data.rochefort.main.temp_min|to_celsius }}</p>
-          <p class="card-text">Humidity: {{ weather_data.rochefort.main.humidity }} %</p>
-          <p class="card-text">Wind: {{ weather_data.rochefort.wind.speed }} m/s</p>
-          <p class="card-text">Sunrise: {{ weather_data.rochefort.sys.sunrise|to_human_date }}</p>
-          <p class="card-text">Sunset: {{ weather_data.rochefort.sys.sunset|to_human_date }}</p>
-        </div>
-      </div>
-    </div>
     <div class="row">
-      <div class="col">
-        <div class="card" style="width: 18rem;">
-          <div class="card-body">
-            <h5 class="card-title">Balikpapan</h5>
-            <h6 class="card-subtitle mb-2 text-muted">{{ weather_data.balikpapan.weather.0.main }}, {{ weather_data.balikpapan.weather.0.description }}</h6>
-            <p class="card-text">Temp: {{ weather_data.balikpapan.main.temp|to_celsius }}</p>
-            <p class="card-text">Max: {{ weather_data.balikpapan.main.temp_max|to_celsius }}</p>
-            <p class="card-text">Min: {{ weather_data.balikpapan.main.temp_min|to_celsius }}</p>
-            <p class="card-text">Humidity: {{ weather_data.balikpapan.main.humidity }} %</p>
-            <p class="card-text">Wind: {{ weather_data.balikpapan.wind.speed }} m/s</p>
-            <p class="card-text">Sunrise: {{ weather_data.balikpapan.sys.sunrise|to_human_date }}</p>
-            <p class="card-text">Sunset: {{ weather_data.balikpapan.sys.sunset|to_human_date }}</p>
-          </div>
+        <div class="col-bg mx-auto">
+            {% for content in data.contents.quotes %}
+                <div class="jumbotron">
+                    <h1 class="display-4">Quote of the day</h1>
+                    <p class="lead">{{ content.quote }}</p>
+                    <hr class="my-4">
+                    <p>{{ content.author }}</p>
+                </div>
+            {% endfor %}
         </div>
-      </div>
     </div>
-  </div>
 </div>
 {% endblock %}

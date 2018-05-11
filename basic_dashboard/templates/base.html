@@ -33,6 +33,7 @@
     <div class="collapse navbar-collapse">
       <div class="navbar-nav">
         <a class="nav-item nav-link" href="{% url 'basic_dashboard:home' %}">Home</a>
+        <a class="nav-item nav-link" href="{% url 'basic_dashboard:get_weather' %}">Weather</a>
         <li class="nav-item dropdown">
           <a class="nav-link dropdown-toggle" href="#"
           data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -40,7 +41,9 @@
           <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
             <form class="form-inline" action="{% url 'basic_dashboard:get_crypto' 'search' %}" method="POST">
               {% csrf_token %}
-              <input name="searched" class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
+              <a class="dropdown-item" href="#">Crypto Search
+                  <input name="searched" class="form-control mr-sm-2" type="search" placeholder="Crypto" aria-label="Search">
+              </a>
             </form>
             <div class="dropdown-divider"></div>
             <a class="dropdown-item" href="{% url 'basic_dashboard:get_crypto' 'BTC' %}">BTC</a>
@@ -54,7 +57,9 @@
           <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
             <form class="form-inline" action="{% url 'basic_dashboard:get_movie' %}" method="POST">
               {% csrf_token %}
-              <input name="searched" class="form-control mr-sm-2" type="search" placeholder="Movie" aria-label="Search">
+              <a class="dropdown-item" href="#">Movie Search
+                  <input name="searched" class="form-control mr-sm-2" type="search" placeholder="Movie" aria-label="Search">
+              </a>
             </form>
             <div class="dropdown-divider"></div>
             <a class="dropdown-item" href="{% url 'basic_dashboard:latest_movie' %}">Latest</a>
@@ -62,12 +67,13 @@
             <a class="dropdown-item" href="{% url 'basic_dashboard:top_rated_movies' %}">Top Rated</a>
             <a class="dropdown-item" href="{% url 'basic_dashboard:now_playing_movies' %}">Now Playing</a>
             <a class="dropdown-item" href="{% url 'basic_dashboard:upcoming_movies' %}">Upcoming</a>
-            <a class="dropdown-item" href="#">Reviews
-                <form class="form-inline" action="{% url 'basic_dashboard:get_movie_reviews' '0' %}" method="POST">
-                  {% csrf_token %}
-                  <input name="searched" class="form-control mr-sm-2" type="int" placeholder="Movie id..." aria-label="Search">
-                </form>
-            </a>
+            <div class="dropdown-divider"></div>
+            <form class="form-inline" action="{% url 'basic_dashboard:get_movie_reviews' '0' %}" method="POST">
+                {% csrf_token %}
+                <a class="dropdown-item" href="#">Reviews
+                    <input name="searched" class="form-control mr-sm-2" type="int" placeholder="Movie id..." aria-label="Search">
+                </a>
+            </form>
           </div>
         </li>
         <li class="nav-item dropdown">
@@ -77,7 +83,9 @@
           <div class="dropdown-menu" aria-describedby="navbarDropdownMenuLink">
             <form class="form-inline" action="{% url 'basic_dashboard:get_tvshow' %}" method="POST">
               {% csrf_token %}
-              <input name="searched" class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
+              <a class="dropdown-item" href="#">TV Show Search
+                  <input name="searched" class="form-control mr-sm-2" type="search" placeholder="TV Show" aria-label="Search">
+              </a>
             </form>
             <div class="dropdown-divider"></div>
             <a class="dropdown-item" href="{% url 'basic_dashboard:latest_tvshow' %}">Latest</a>
@@ -85,15 +93,15 @@
             <a class="dropdown-item" href="{% url 'basic_dashboard:top_rated_tvshows' %}">Top Rated</a>
             <a class="dropdown-item" href="{% url 'basic_dashboard:upcoming_tvshows' %}">Coming</a>
             <a class="dropdown-item" href="{% url 'basic_dashboard:playing_today_tvshows' %}">On Air Today</a>
-            <a class="dropdown-item" href="#">Reviews
-                <form class="form-inline" action="{% url 'basic_dashboard:get_tvshow_reviews' '0' %}" method="POST">
-                  {% csrf_token %}
-                  <input name="searched" class="form-control mr-sm-2" type="int" placeholder="TV Show id..." aria-label="Search">
-                </form>
-            </a>
+            <div class="dropdown-divider"></div>
+            <form class="form-inline my-2 my-lg-0" action="{% url 'basic_dashboard:get_tvshow_reviews' '0' %}" method="POST">
+                {% csrf_token %}
+                <a class="dropdown-item" href="#">Reviews
+                    <input name="searched" class="form-control mr-sm-2" type="int" placeholder="TV Show id..." aria-label="Search">
+                </a>
+            </form>
           </div>
         </li>
-        <a class="nav-item nav-link" href="#">Domotic</a>
       </div>
     </div>
   </nav>

@@ -1,25 +1,36 @@
 from django.shortcuts import render, redirect
-from django.http import HttpResponse, HttpResponseNotFound, Http404
-from django.core import serializers
-from django.db.models.base import ObjectDoesNotExist
 from django.urls import reverse
 from django.conf import settings
 from django.contrib import messages
 
 import requests
 
-
 # Create your views here.
+
+# Home
 
 def index(request):
 	"""
-	Index or home page of the app
+	Return a quote on the index
+	"""
+	response = requests.get(url=settings.QUOTES_API_URL).json()
+	context = {
+		'data': response,
+		'title': 'Home'
+	}
+	return render(request, 'home.html', context)
+
+# Weather
+
+def get_weather(request):
+	"""
+	Get the weather
 	"""
 	weather = {'rochefort': '', 'annemasse': '', 'balikpapan': ''}
 	for key in weather.keys():
 		weather[key] = requests.get(url=settings.WEATHER_API_URL +
 		key + '&APPID=' + settings.WEATHER_API_KEY).json()
-	return render(request, 'home.html', {'weather_data': weather})
+	return render(request, 'weather.html', {'weather_data': weather})
 
 # Cryptos
 
@@ -133,28 +144,31 @@ def get_upcoming_movies(request):
 	}
 	return render(request, 'movies.html', context)
 
-def get_movie_reviews(request, id):
+def get_movie_reviews(request, searched):
 	"""
-	Get reviews from moviedb according to the id of the movie
+	Get reviews from moviedb according to the searched value (int)
 	"""
 	if request.method == 'POST':
-		id = request.POST.get('searched', '')
+		searched = request.POST.get('searched', '')
 		response = requests.get(url=settings.THE_MOVIE_DB_API_URL +
-		'/movie/' + str(id) + '/reviews?api_key=' + settings.THE_MOVIE_DB_API_KEY +
+		'/movie/' + str(searched) + '/reviews?api_key=' + settings.THE_MOVIE_DB_API_KEY +
 		'&page=1')
 		context = {
 			'data': response.json(),
-			'title': 'Movie {} Reviews'.format(id),
+			'title': 'Movie {} Reviews'.format(searched),
 		}
-		return redirect(reverse('basic_dashboard:get_movie_reviews', args=(id,)))
+		return redirect(reverse('basic_dashboard:get_movie_reviews', args=(searched,)))
 	elif request.method == 'GET':
-		assert type(id) is int
+		try:
+			assert isinstance(searched, int)
+		except AssertionError:
+			searched = 0
 		response = requests.get(url=settings.THE_MOVIE_DB_API_URL +
-		'/movie/' + str(id) + '/reviews?api_key=' + settings.THE_MOVIE_DB_API_KEY +
+		'/movie/' + str(searched) + '/reviews?api_key=' + settings.THE_MOVIE_DB_API_KEY +
 		'&page=1')
 		context = {
 			'data': response.json(),
-			'title': 'Movie {} Reviews'.format(id),
+			'title': 'Movie {} Reviews'.format(searched),
 		}
 		return render(request, 'reviews.html', context)
 	else:
@@ -259,9 +273,9 @@ def get_playing_today_tvshows(request):
 	}
 	return render(request, 'tvshows.html', context)
 
-def get_tvshow_reviews(request, id):
+def get_tvshow_reviews(request, searched):
 	"""
-	Get reviews from moviedb according to the id of the tvshow
+	Get reviews from moviedb according to the searched value (int)
 	"""
 	if request.method == 'POST':
 		id = request.POST.get('searched', '')
@@ -275,17 +289,18 @@ def get_tvshow_reviews(request, id):
 		}
 		return redirect(reverse('basic_dashboard:get_tvshow_reviews', args=(id,)))
 	elif request.method == 'GET':
-		assert type(id) is int
+		try:
+			assert isinstance(searched, int)
+		except AssertionError:
+			searched = 0
 		response = requests.get(url=settings.THE_MOVIE_DB_API_URL +
-		'/tv/' + str(id) + '/reviews?api_key=' + settings.THE_MOVIE_DB_API_KEY +
+		'/tv/' + str(searched) + '/reviews?api_key=' + settings.THE_MOVIE_DB_API_KEY +
 		'&page=1')
 		context = {
 			'data': response.json(),
-			'title': 'TV Show {} Reviews'.format(id),
+			'title': 'TV Show {} Reviews'.format(searched),
 		}
 		return render(request, 'reviews.html', context)
 	else:
 		messages.add_message(request, messages.INFO, 'Issue with your request')
 		return render(request, 'home.html')
-
-# Domotic
