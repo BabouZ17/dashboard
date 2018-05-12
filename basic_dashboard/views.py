@@ -304,14 +304,13 @@ def get_tvshow_reviews(request, searched):
 	Get reviews from moviedb according to the searched value (int)
 	"""
 	if request.method == 'POST':
-		id = request.POST.get('searched', '')
+		searched = request.POST.get('searched', '')
 		response = requests.get(url=settings.THE_MOVIE_DB_API_URL +
-			'/tv/' + str(id) + '/reviews?api_key=' + settings.THE_MOVIE_DB_API_KEY +
+			'/tv/' + str(searched) + '/reviews?api_key=' + settings.THE_MOVIE_DB_API_KEY +
 			'&page=1')
 		context = {
 			'data': response.json(),
 			'title': 'TV Show {} Reviews'.format(id),
-			'test': 'haha'
 		}
 		return redirect(reverse('basic_dashboard:get_tvshow_reviews', args=(id,)))
 	elif request.method == 'GET':
