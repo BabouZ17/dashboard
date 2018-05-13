@@ -106,7 +106,7 @@ def get_crypto(request, crypto):
 			'crypto_news': crypto_news,
 			'global_data': global_crypto_data,
 		}
-		return redirect(reverse('basic_dashboard:get_crypto', args=(searched,)))
+		return render(request, 'crypto.html', context)
 
 # Movies
 
