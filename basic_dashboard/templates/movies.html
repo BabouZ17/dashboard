@@ -4,6 +4,7 @@
     <h1><span class="badge badge-secondary">{{ title }}</span></h1>
 </div>
 {% block content %}
+<div class="container-fluid">
 <div class="table-responsive-lg">
   <table class="table table-bordered table-striped table-hover">
     <thead class="thead-dark">
@@ -31,5 +32,6 @@
       {% endfor %}
     </tbody>
   </table>
+</div>
 </div>
 {% endblock %}
